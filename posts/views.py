@@ -22,4 +22,12 @@ def about(request):
 def index_use_template(request):
     article_records = Post.objects.all()
     now = datetime.now()
-    return render(request, "index.html", locals()) # {'now': now}
+    # return render(request, "index.html", locals()) # {'now': now}
+    return render(request, "pages/home.html",locals())
+
+def showPost(request, slug):
+    article = Post.objects.get(slug = slug)
+    return render(request, "pages/post.html", locals())
+
+def login(request):
+    return render(request, 'pages/login.html')
