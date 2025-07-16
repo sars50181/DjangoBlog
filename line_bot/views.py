@@ -5,7 +5,11 @@ from django.conf import settings
 
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, LocationMessage
+from linebot.models import StickerMessage, StickerSendMessage
+from linebot.models import ImageMessage, ImageSendMessage
+
+
 # Create your views here.
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_TOKEN)
@@ -35,23 +39,56 @@ def callback(request):
                     if event.message.text == "###我要報到###":
                         line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text = "報到成功!!!" )
+                            TextSendMessage(text="報到成功!!!")
                         )
                     elif event.message.text == "###我的名牌###":
                         line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text = "您的編號是 001 !" )
+                            TextSendMessage(text="您的編號是 001 !")
                         )
                     elif event.message.text == "###車號登入###":
                         line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text = "ABC-123 登入成功" )
+                            TextSendMessage(text="ABC-123 登入成功")
                         )
                     else:
                         line_bot_api.reply_message(
                             event.reply_token,
-                            TextSendMessage(text = "目前尚未開放詢問喔" )
+                            TextSendMessage(text="目前尚未開放詢問喔")
                         )
+                elif isinstance(event.message, LocationMessage):
+                    print("收到定位訊息:", event)
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text="緯度:{}, 經度:{}".format(event.message.latitude, event.message.longitude))
+                    )
+                elif isinstance(event.message, StickerMessage):
+                    # https://developers.line.biz/en/docs/messaging-api/sticker-list/
+                    print("收到貼圖訊息:", event)
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        StickerSendMessage(
+                            8525,
+                            16581290,
+                        )
+                    )
+                elif isinstance(event.message, ImageMessage):
+                    print("收到圖片", event.message)
+                    image_name = event.message.id + ".jpg"
+                    image_content = line_bot_api.get_message_content(event.message.id)
+                    path = "./public/uploads/" + image_name
+                    with open(path, 'wb') as fd:
+                        for chunk in image_content.iter_content():
+                            fd.write(chunk)
+
+                    reply_image_path = "https://{}/media/{}".format(request.get_host(), image_name)
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        ImageSendMessage(
+                            preview_image_url=reply_image_path,
+                            original_content_url=reply_image_path,
+                        )
+                    )
 
                 else:
                     print("文字以外的類型\n")
