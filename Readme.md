@@ -90,3 +90,10 @@ python manage.py dumpdata --format=json posts > posts.db.json
 ```shell
 python manage.py loaddata posts.db.json
 ```
+
+### 安裝 ssl 憑證工具
+```shell
+sudo apt update && sudo apt install -y certbot
+sudo apt install -y python3-certbot-apache
+sudo certbot --apache
+```
