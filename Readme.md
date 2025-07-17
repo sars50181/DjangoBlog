@@ -80,3 +80,13 @@ ls -la /var/log/apache2/
 cat /var/log/apache2/error-djangoBLOG.log
 nano /var/log/apache2/error-djangoBLOG.log
 ```
+
+### 匯出 post db 資料
+```shell
+python manage.py dumpdata --format=json posts > posts.db.json
+```
+
+### 指令匯入檔案
+```shell
+python manage.py loaddata posts.db.json
+```

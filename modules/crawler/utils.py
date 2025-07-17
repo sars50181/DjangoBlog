@@ -105,4 +105,5 @@ def run(**kwargs):
         full_article.append(temp_dict)
         time.sleep(0.5)
 
-    return pandas.DataFrame(full_article)
+    return full_article
+    # return pandas.DataFrame(full_article)

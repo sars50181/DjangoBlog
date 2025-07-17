@@ -1,5 +1,6 @@
 from modules.crawler.utils import parserTargetURL
 from modules.crawler.utils import run
+import pandas
 
 
 # print(parserTargetURL('board', board='Baseball'))
@@ -12,4 +13,4 @@ from modules.crawler.utils import run
 
 
 data = run(board='Baseball', pageNum='19621')
-print(data)
+print(pandas.DataFrame(data))
