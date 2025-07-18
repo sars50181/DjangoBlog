@@ -3,6 +3,7 @@ from modules.crawler.utils import run
 from posts.models import Post
 
 class Command(BaseCommand):
+    # python manage.py runcrawler --board NBA
     help = "向 PPT.cc 進行爬蟲, usage: --board [指定看板] --pages [指定頁數]"
 
     def add_arguments(self, parser):
