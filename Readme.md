@@ -94,6 +94,24 @@ python manage.py loaddata posts.db.json
 ### 安裝 ssl 憑證工具
 ```shell
 sudo apt update && sudo apt install -y certbot
+# 將 原先80 port WSGI 開頭的設定文字進行註解 (用 # 字號) → Crtl + O 紀錄, Crtl +X 離開
 sudo apt install -y python3-certbot-apache
 sudo certbot --apache
+sudo apachectl graceful
+
+# 憑證更新 自動檢查全部網站，到期期限30天內的憑證做更新
+sudo certbot renew
+
+# 掛上排程
+sudo EDITOR=nano crontab -e
+# 貼上在最後一行 
+# 0 3 2,16 * * certbot renew
+# Crtl + O 紀錄, Crtl +X 離開
+# console 會出現  crontab: installing new crontab
+
+```
+
+### mac 安裝 pythom mysqlclient 使用 conda
+```shell
+conda install -c conda-forge mysqlclient
 ```
